@@ -1,6 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
+SQL_FILE="/docker-entrypoint-initdb.d/init-db.sh"
+
+# not really necessary
 # Ensure the MySQL user exists and is set up correctly
 if ! id -u mysql >/dev/null 2>&1; then
     echo "Creating MySQL user and group"
@@ -28,34 +31,18 @@ if [ "$(stat -c '%U' /var/lib/mysql)" != "mysql" ] || [ "$(stat -c '%G' /var/lib
     chown -R mysql:mysql /var/lib/mysql
 fi
 
+# this is necessary
 # Initialize MariaDB if not already done
 if [ ! -d "/var/lib/mysql/mysql" ]; then
     echo "Initializing MariaDB database"
     mariadb-install-db --user=mysql --datadir=/var/lib/mysql
     chown -R mysql:mysql /var/lib/mysql  # Ensure ownership after initialization
+    if [ -f "$SQL_FILE" ]; then
+        /bin/sh $SQL_FILE
+    else
+        echo "No SQL initialization file found at $SQL_FILE"
+    fi
 fi
 
-
-echo "Starting MariaDB server in background"
-# Start the MariaDB server in the background
-mysqld --user=mysql --datadir=/var/lib/mysql &
-
-echo "Waiting for MariaDB to be fully ready..."
-until mysqladmin ping -h localhost --silent; do
-    sleep 1
-done
-
-echo "MariaDB is up and running."
-
-# Run any custom initialization scripts in /docker-entrypoint-initdb.d
-echo "Running initialization scripts from /docker-entrypoint-initdb.d"
-for f in /docker-entrypoint-initdb.d/*; do
-    case "$f" in
-        *.sh)  echo "Running $f"; . "$f" ;;
-        *.sql) echo "Running $f"; mysql -u root -p"$MYSQL_ROOT_PASSWORD" < "$f";;
-        *)      echo "Ignoring $f" ;;
-    esac
-done
-
 # Start MariaDB in the foreground to keep the container running
-wait $(jobs -p)  # Wait for the MariaDB process (background job) to finish
+exec /usr/bin/mysqld --user=mysql --console
