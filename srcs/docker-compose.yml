@@ -2,7 +2,7 @@ services:
   nginx:
     build:
       context: ./requirements/nginx/. # Path to the directory containing the Dockerfile
-    image: custom-nginx:latest # Name and tag for the built image
+    image: # Name and tag for the built image
     ports:
       - "443:443" # Map port 8080 on the host to port 8080 in the container
     extra_hosts:
