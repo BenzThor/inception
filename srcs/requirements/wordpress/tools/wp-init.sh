@@ -1,5 +1,7 @@
 #!bin/sh
 
+which wp
+
 if [ ! -f /var/www/html/wp-config.php ]; then
 	wp core download --path=/var/www/html
 	wp config create --dbname=$DB_NAME_WP --dbuser=$DB_USER_WP --dbpass=$DB_PASSWORD_WP --dbhost=$DB_HOST_WP --path=/var/www/html
@@ -9,4 +11,4 @@ fi
 
 wp plugin update --all
 
-exec php-fpm82 --nodaemonize
+exec php-fpm --nodaemonize

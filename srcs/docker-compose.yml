@@ -2,8 +2,86 @@ services:
   nginx:
     build:
       context: ./requirements/nginx/. # Path to the directory containing the Dockerfile
-    image: # Name and tag for the built image
+    image: nginx:tbenz # Name and tag for the built image
+    volumes:
+      - wp_volume:/var/www/html
     ports:
       - "443:443" # Map port 8080 on the host to port 8080 in the container
     extra_hosts:
       - "tbenz.42.fr:127.0.0.1" # Add extra host entries to /etc/hosts in the container
+    networks:
+      - inception_network
+    depends_on:
+      - wordpress
+    restart: always
+    healthcheck: &health_check_default
+      test: ["CMD", "curl", "-f", "https://localhost/"]
+      interval: 30s
+      retries: 3
+      start_period: 10s
+      timeout: 10s
+  mariadb:
+    build:
+      context: ./requirements/mariadb/.
+    image: mariadb:tbenz
+    volumes:
+      - mariadb_volume:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    networks:
+      - inception_network
+    restart: always
+    healthcheck: 
+      <<: *health_check_default
+      test: ["CMD", "mysql", "-u", "root", "-p$MYSQL_ROOT_PASSWORD", "-e", "SELECT 1"]
+  wordpress:
+    build:
+      context: ./requirements/wordpress/.
+    image: wordpress:tbenz
+    volumes:
+      - wp_volume:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      DB_HOST_WP: ${DB_HOST_WP}
+      DB_NAME_WP: ${DB_NAME_WP}
+      DB_USER_WP: ${DB_USER_WP}
+      DB_PASSWORD_WP: ${DB_PASSWORD_WP}
+      URL_WP: ${URL_WP}
+      TITLE_WP: ${TITLE_WP}
+      ADMIN_USER_WP: ${ADMIN_USER_WP}
+      ADMIN_PASSWORD_WP: ${ADMIN_PASSWORD_WP}
+      ADMIN_EMAIL_WP: ${ADMIN_EMAIL_WP}
+    networks:
+      - inception_network
+    depends_on:
+      - mariadb
+    restart: always
+    healthcheck:
+      <<: *health_check_default
+      test: ["CMD", "curl", "-f", "http://localhost"]
+
+networks:
+  inception_network:
+    driver: bridge
+    name: inception_net
+    internal: true
+
+volumes:
+  mariadb_volume:
+    driver: local
+    driver_opts:
+      type: none
+      device: ../.data/mariadb
+      o: bind
+  wp_volume:
+    driver: local
+    driver_opts:
+      type: none
+      device: ../.data/wp
+      o: bind
