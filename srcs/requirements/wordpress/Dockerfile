@@ -1,13 +1,16 @@
 FROM alpine:3.20
 
 # Install PHP and necessary extensions along with MariaDB client
-RUN apk add --no-cache --update php curl php-mysqli php-mbstring php-xml php-json php-curl mariadb-client && \
-    # Download the latest WordPress tarball
+RUN apk add --no-cache --update php curl php-mysqli php-fpm php-mbstring php-xml php-json php-curl php-phar mariadb-client && \
+    #create a symbolic link to be able to execute php-fpmMajorMiniroVersion
+	ln -s /usr/sbin/php-fpm83 /usr/bin/php-fpm && \
+	# Download the latest WordPress tarball
     curl -O https://wordpress.org/latest.tar.gz && \
 	curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     # Extract the WordPress tarball
     tar -xvzf latest.tar.gz && \
     # Copy the extracted WordPress files to the web root directory
+	mkdir -p /var/www/html/ &&\
     cp -R wordpress/* /var/www/html/ && \
     # Clean up: remove the extracted WordPress folder and the tarball
     rm -rf wordpress latest.tar.gz && \
@@ -16,7 +19,6 @@ RUN apk add --no-cache --update php curl php-mysqli php-mbstring php-xml php-jso
     # Move the WP-CLI PHAR file to a directory in the system PATH to allow global access (as wp)
     mv wp-cli.phar /usr/local/bin/wp && \
 	# Create MySQL user and group (if not already created)
-	chmod +x /usr/local/bin/wp && \
 	getent group tbenz || addgroup -S tbenz && \
     getent passwd tbenz || adduser -S -G tbenz tbenz && \
 	# Get the version number of php

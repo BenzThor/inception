@@ -17,8 +17,8 @@ chmod +x /usr/local/bin/generate-cert.sh && \
 
 # Copy nginx.conf file into the container
 COPY ./conf/nginx.conf /etc/nginx/.
-	# Copy the index.html file to the container
-COPY ./conf/index.html /var/www/html/
+# 	# Copy the index.html file to the container
+# COPY ./conf/index.html /var/www/html/
 
 USER www-data
 
