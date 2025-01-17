@@ -1,6 +1,6 @@
-# Use a lightweight Alpine image as the base
-FROM alpine:3.20
+ARG ALPINE_VERSION
 
+FROM alpine:${ALPINE_VERSION}
 
 # Install MariaDB and necessary tools
 RUN apk add --no-cache --update mariadb mariadb-client && \

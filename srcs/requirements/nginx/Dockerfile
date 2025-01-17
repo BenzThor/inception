@@ -1,4 +1,5 @@
-# Get the base image (latest version is alpine:3.21)
+# ARG ALPINE_VERSION
+
 FROM alpine:3.20
 
 # Copy the certificate generation script into the container

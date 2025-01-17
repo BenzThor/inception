@@ -2,6 +2,8 @@ services:
   nginx:
     build:
       context: ./requirements/nginx/. # Path to the directory containing the Dockerfile
+      args:
+        ALPINE_VERSION: ${ALPINE_VERSION:-}
     image: nginx:tbenz # Name and tag for the built image
     volumes:
       - wp_volume:/var/www/html
@@ -23,6 +25,8 @@ services:
   mariadb:
     build:
       context: ./requirements/mariadb/.
+      args:
+        ALPINE_VERSION: ${ALPINE_VERSION:-}
     image: mariadb:tbenz
     volumes:
       - mariadb_volume:/var/lib/mysql
@@ -34,12 +38,15 @@ services:
     networks:
       - inception_network
     restart: always
-    healthcheck: 
+    healthcheck:
       <<: *health_check_default
       test: ["CMD", "mysql", "-u", "root", "-p$MYSQL_ROOT_PASSWORD", "-e", "SELECT 1"]
   wordpress:
     build:
       context: ./requirements/wordpress/.
+      args:
+        ALPINE_VERSION: ${ALPINE_VERSION:-}
+        PHP_VERSION: ${PHP_VERSION}
     image: wordpress:tbenz
     volumes:
       - wp_volume:/var/www/html

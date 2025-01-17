@@ -1,7 +1,11 @@
-FROM alpine:3.20
+ARG ALPINE_VERSION
+ARG PHP_VERSION
+
+FROM alpine:${ALPINE_VERSION}
 
 # Install PHP and necessary extensions along with MariaDB client
-RUN apk add --no-cache --update php curl php-mysqli php-fpm php-mbstring php-xml php-json php-curl php-phar mariadb-client && \
+RUN echo "Using Alpine version: ${ALPINE_VERSION}" && \
+    apk add --no-cache --update php${PHP_VERSION} curl php-mysqli${PHP_VERSION} php-fpm${PHP_VERSION} php-mbstring${PHP_VERSION} php-xml${PHP_VERSION} php-json${PHP_VERSION} php-curl${PHP_VERSION} php-phar${PHP_VERSION} mariadb-client && \
     #create a symbolic link to be able to execute php-fpmMajorMiniroVersion
 	ln -s /usr/sbin/php-fpm83 /usr/bin/php-fpm && \
 	# Download the latest WordPress tarball
@@ -20,13 +24,7 @@ RUN apk add --no-cache --update php curl php-mysqli php-fpm php-mbstring php-xml
     mv wp-cli.phar /usr/local/bin/wp && \
 	# Create MySQL user and group (if not already created)
 	getent group tbenz || addgroup -S tbenz && \
-    getent passwd tbenz || adduser -S -G tbenz tbenz && \
-	# Get the version number of php
-	PHP_VERSION=$(php -r "echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;") && \
-	# and store it
-	echo "PHP_VERSION=${PHP_VERSION}" >> /etc/environment
-
-ENV PHP_VERSION=$(PHP_VERSION)
+    getent passwd tbenz || adduser -S -G tbenz tbenz
 
 # Copy custom PHP-FPM configuration file to the appropriate PHP version folder
 COPY ./conf/php-fpm.conf /etc/php/${PHP_VERSION}/
