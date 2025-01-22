@@ -1,23 +1,21 @@
-ARG ALPINE_VERSION
+ARG ALPINE_VERSION=3.20
+FROM alpine:${ALPINE_VERSION}
 ARG PHP_VERSION
 
-FROM alpine:${ALPINE_VERSION}
-
 # Install PHP and necessary extensions along with MariaDB client
-RUN echo "Using Alpine version: ${ALPINE_VERSION}" && \
-    apk add --no-cache --update php${PHP_VERSION} curl php-mysqli${PHP_VERSION} php-fpm${PHP_VERSION} php-mbstring${PHP_VERSION} php-xml${PHP_VERSION} php-json${PHP_VERSION} php-curl${PHP_VERSION} php-phar${PHP_VERSION} mariadb-client && \
+RUN apk add --no-cache --update php${PHP_VERSION} curl php{PHP_VERSION}-mysqli php{PHP_VERSION}-fpm php{PHP_VERSION}-mbstring php{PHP_VERSION}-xml php{PHP_VERSION}-json php{PHP_VERSION}-curl php{PHP_VERSION}-phar mariadb-client && \
     #create a symbolic link to be able to execute php-fpmMajorMiniroVersion
-	ln -s /usr/sbin/php-fpm83 /usr/bin/php-fpm && \
+	# ln -s /usr/sbin/php${PHP_VERSION}-fpm /usr/bin/php-fpm && \
 	# Download the latest WordPress tarball
-    curl -O https://wordpress.org/latest.tar.gz && \
+    # curl -O https://wordpress.org/latest.tar.gz && \
 	curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     # Extract the WordPress tarball
-    tar -xvzf latest.tar.gz && \
+    # tar -xvzf latest.tar.gz && \
     # Copy the extracted WordPress files to the web root directory
 	mkdir -p /var/www/html/ &&\
-    cp -R wordpress/* /var/www/html/ && \
+    # cp -R wordpress/* /var/www/html/ && \
     # Clean up: remove the extracted WordPress folder and the tarball
-    rm -rf wordpress latest.tar.gz && \
+    # rm -rf wordpress latest.tar.gz && \
 	# Make the WP-CLI PHAR file executable
     chmod +x wp-cli.phar && \
     # Move the WP-CLI PHAR file to a directory in the system PATH to allow global access (as wp)

@@ -14,7 +14,7 @@ ARCHITECTURE = $(shell uname -m)
 ifeq ($(ARCHITECTURE),)
   $(error "Error: Failed to fetch architecture.")
 endif
-PHP_VERSION = $(shell curl -s $(ALPINE_WEBSITE)v$(ALPINE_VERSION)/community/$(ARCHITECTURE)/APKINDEX.tar.gz | tar -xzO | awk '/^P:php[0-9]/{getline; print $0}' | grep -oP '^V:\K\d+\.\d+\.\d+' | sort -V | tail -n 1)
+PHP_VERSION = $(shell curl -s $(ALPINE_WEBSITE)v$(ALPINE_VERSION)/community/$(ARCHITECTURE)/APKINDEX.tar.gz | tar -xzO | grep -oP '^P:php\d+' | sed 's/[^0-9]*//g' | sort -n | tail -n 1)
 ifeq ($(PHP_VERSION),)
   $(error "Error: Failed to fetch PHP version.")
 endif
@@ -50,7 +50,7 @@ rm_images:
 	${DOCKER_COMPOSE} --rmi all
 
 logs:
-	${DOCKER_COMPOSE} logs nginx wordpress logs mariadb
+	${DOCKER_COMPOSE} logs nginx wordpress mariadb
 
 logs_%:
 	${DOCKER_COMPOSE} logs $*
@@ -65,6 +65,7 @@ clean: down
 	${DOCKER_COMPOSE} down -v --rmi all --remove-orphans
 
 fclean: clean
+	sudo chown -R ${USER}:${USER} ./.data/mariadb
 	docker system prune -f
 	rm -r $(VOLUMES_DIR)
 	@sed -i '/ALPINE_VERSION/d; /PHP_VERSION/d' $(ENV_DIR)

@@ -1,6 +1,5 @@
-# ARG ALPINE_VERSION
-
-FROM alpine:3.20
+ARG ALPINE_VERSION=3.20
+FROM alpine:${ALPINE_VERSION}
 
 # Copy the certificate generation script into the container
 COPY ./conf/generate-cert.sh /usr/local/bin/
