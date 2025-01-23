@@ -15,13 +15,13 @@ services:
       - inception_network
     depends_on:
       - wordpress
-    # restart: always
-    # healthcheck: &health_check_default
-    #   test: ["CMD", "curl", "-f", "https://localhost/"]
-    #   interval: 30s
-    #   retries: 3
-    #   start_period: 10s
-    #   timeout: 10s
+    restart: always
+    healthcheck: &health_check_default
+      test: ["CMD", "curl", "-f", "https://localhost/"]
+      interval: 30s
+      retries: 3
+      start_period: 10s
+      timeout: 10s
   mariadb:
     build:
       context: ./requirements/mariadb/.
@@ -37,10 +37,10 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     networks:
       - inception_network
-    # restart: always
-    # healthcheck:
-    #   <<: *health_check_default
-    #   test: ["CMD", "mysql", "-u", "root", "-p$MYSQL_ROOT_PASSWORD", "-e", "SELECT 1"]
+    restart: always
+    healthcheck:
+      <<: *health_check_default
+      test: ["CMD", "mysql", "-u", "root", "-p$MYSQL_ROOT_PASSWORD", "-e", "SELECT 1"]
   wordpress:
     build:
       context: ./requirements/wordpress/.
@@ -68,10 +68,10 @@ services:
       - inception_network
     depends_on:
       - mariadb
-    # restart: always
-    # healthcheck:
-    #   <<: *health_check_default
-    #   test: ["CMD", "curl", "-f", "http://localhost"]
+    restart: always
+    healthcheck:
+      <<: *health_check_default
+      test: ["CMD", "curl", "-f", "http://localhost"]
 
 networks:
   inception_network:

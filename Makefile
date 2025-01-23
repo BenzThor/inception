@@ -38,7 +38,7 @@ build: create_dirs
 		/bin/echo -e "ALPINE_VERSION=$(ALPINE_VERSION)\nPHP_VERSION=$(PHP_VERSION)" >> ./srcs/.env; \
 	fi
 	docker compose -f ./srcs/docker-compose.yml config
-	$(DOCKER_COMPOSE) build
+	$(DOCKER_COMPOSE) build --progress=plain
 
 up: create_dirs
 	${DOCKER_COMPOSE} up -d
@@ -65,7 +65,9 @@ clean: down
 	${DOCKER_COMPOSE} down -v --rmi all --remove-orphans
 
 fclean: clean
-	sudo chown -R ${USER}:${USER} ./.data/mariadb
+	if [ -d "./.data" ]; then \
+		sudo chown -R ${USER}:${USER} ./.data; \
+	fi
 	docker system prune -f
 	rm -r $(VOLUMES_DIR)
 	@sed -i '/ALPINE_VERSION/d; /PHP_VERSION/d' $(ENV_DIR)
