@@ -1,6 +1,9 @@
 #!/bin/sh
 
 which wp
+echo "Checking for wp command..."
+which wp || echo "wp command not found"
+echo "Current PATH: $PATH"
 
 if [ ! -f /var/www/html/wp-config.php ]; then
 	wp core download --path=/var/www/html

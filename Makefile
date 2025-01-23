@@ -14,7 +14,7 @@ ARCHITECTURE = $(shell uname -m)
 ifeq ($(ARCHITECTURE),)
   $(error "Error: Failed to fetch architecture.")
 endif
-PHP_VERSION = $(shell curl -s $(ALPINE_WEBSITE)v$(ALPINE_VERSION)/community/$(ARCHITECTURE)/APKINDEX.tar.gz | tar -xzO | grep -oP '^P:php\d+' | sed 's/[^0-9]*//g' | sort -n | tail -n 1)
+PHP_VERSION = $(shell curl -s $(ALPINE_WEBSITE)v$(ALPINE_VERSION)/community/$(ARCHITECTURE)/APKINDEX.tar.gz | tar -xzO | strings | grep -oP '^P:php\d+' | sed 's/[^0-9]*//g' | sort -n | tail -n 1)
 ifeq ($(PHP_VERSION),)
   $(error "Error: Failed to fetch PHP version.")
 endif

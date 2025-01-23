@@ -3,11 +3,12 @@ FROM alpine:${ALPINE_VERSION}
 ARG PHP_VERSION
 
 # Install PHP and necessary extensions along with MariaDB client
-RUN apk add --no-cache --update php${PHP_VERSION} curl php{PHP_VERSION}-mysqli php{PHP_VERSION}-fpm php{PHP_VERSION}-mbstring php{PHP_VERSION}-xml php{PHP_VERSION}-json php{PHP_VERSION}-curl php{PHP_VERSION}-phar mariadb-client && \
+RUN apk add --no-cache --update php${PHP_VERSION} curl php${PHP_VERSION}-mysqli php${PHP_VERSION}-fpm php${PHP_VERSION}-mbstring php${PHP_VERSION}-xml php${PHP_VERSION}-json php${PHP_VERSION}-curl php${PHP_VERSION}-phar mariadb-client && \
     #create a symbolic link to be able to execute php-fpmMajorMiniroVersion
 	# ln -s /usr/sbin/php${PHP_VERSION}-fpm /usr/bin/php-fpm && \
 	# Download the latest WordPress tarball
     # curl -O https://wordpress.org/latest.tar.gz && \
+	php -v && \
 	curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     # Extract the WordPress tarball
     # tar -xvzf latest.tar.gz && \
@@ -20,6 +21,7 @@ RUN apk add --no-cache --update php${PHP_VERSION} curl php{PHP_VERSION}-mysqli p
     chmod +x wp-cli.phar && \
     # Move the WP-CLI PHAR file to a directory in the system PATH to allow global access (as wp)
     mv wp-cli.phar /usr/local/bin/wp && \
+	which wp || echo "wp command not found after installation" && \
 	# Create MySQL user and group (if not already created)
 	getent group tbenz || addgroup -S tbenz && \
     getent passwd tbenz || adduser -S -G tbenz tbenz
