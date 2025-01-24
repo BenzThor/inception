@@ -13,10 +13,11 @@ chown -R mysql:mysql /var/lib/mysql /run/mysqld
 # Copy custom initialization and entrypoint scripts
 COPY ./conf/entrypoint.sh /usr/local/bin/
 COPY ./tools/init-db.sh /docker-entrypoint-initdb.d/
+COPY ./conf/mariadb-server.cnf /etc/my.cnf.d/mariadb-server.cnf
 
 # Make the scripts executable
-RUN chmod +x /docker-entrypoint-initdb.d/init-db.sh /usr/local/bin/entrypoint.sh
-
+RUN chmod +x /docker-entrypoint-initdb.d/init-db.sh /usr/local/bin/entrypoint.sh && \
+	chown -R mysql:mysql /docker-entrypoint-initdb.d
 # Switch to mysql user for running MariaDB
 USER mysql
 

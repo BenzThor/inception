@@ -37,6 +37,8 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     networks:
       - inception_network
+    expose:
+      - "3306"
     restart: always
     healthcheck:
       <<: *health_check_default

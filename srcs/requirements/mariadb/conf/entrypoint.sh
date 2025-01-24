@@ -35,7 +35,7 @@ fi
 # Initialize MariaDB if not already done
 if [ ! -d "/var/lib/mysql/mysql" ]; then
     echo "Initializing MariaDB database"
-    mariadb-install-db --user=mysql --datadir=/var/lib/mysql
+    mariadb-install-db --no-defaults --datadir=/var/lib/mysql
     chown -R mysql:mysql /var/lib/mysql  # Ensure ownership after initialization
     if [ -f "$SQL_FILE" ]; then
         /bin/sh $SQL_FILE

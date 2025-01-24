@@ -1,0 +1,15 @@
+# Global settings
+[client-server]
+# Use it for options that affect both client and server
+# You can add general client options here if needed
+
+# Server-specific settings
+[mysqld]
+# Allow MariaDB to accept connections from any network interface
+bind-address = 0.0.0.0  # Listens on all interfaces
+
+# Disable networking in some cases (if you wish to disable external access)
+#skip-networking
+
+# Enable logging
+log_error = /var/log/mysql/error.log
