@@ -13,7 +13,9 @@ adduser -S -G www-data www-data && \
 # # Make the script executable
 chmod +x /usr/local/bin/generate-cert.sh && \
 # Run the certificate generation script
-/usr/local/bin/generate-cert.sh
+/usr/local/bin/generate-cert.sh && \
+mkdir -p /var/lib/nginx/logs && \
+chown -R www-data:www-data /var/lib/nginx /etc/nginx /var/log/nginx /etc/ssl/private /run
 
 # Copy nginx.conf file into the container
 COPY ./conf/nginx.conf /etc/nginx/.

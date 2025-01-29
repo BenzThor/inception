@@ -7,8 +7,8 @@ RUN apk add --no-cache --update mariadb mariadb-client && \
 getent group mysql || addgroup -S mysql && \
 getent passwd mysql || adduser -S -G mysql mysql && \
 # Create the MariaDB data and socket directory and set correct ownership
-mkdir -p /var/lib/mysql /run/mysqld && \
-chown -R mysql:mysql /var/lib/mysql /run/mysqld
+mkdir -p /var/lib/mysql /run/mysqld /var/log/mysql  && \
+chown -R mysql:mysql /var/lib/mysql /run/mysqld /var/log/mysql
 
 # Copy custom initialization and entrypoint scripts
 COPY ./conf/entrypoint.sh /usr/local/bin/

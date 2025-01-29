@@ -77,9 +77,9 @@ services:
 
 networks:
   inception_network:
-    driver: bridge
-    name: inception_net
-    internal: true
+    # driver: bridge
+    # name: inception_net
+    # internal: true
 
 volumes:
   mariadb_volume:
