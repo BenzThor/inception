@@ -17,7 +17,7 @@ services:
       - wordpress
     restart: always
     healthcheck: &health_check_default
-      test: ["CMD", "curl", "-f", "https://localhost/"]
+      test: ["CMD", "curl", "-f", "https://127.0.0.1/"]
       interval: 30s
       retries: 3
       start_period: 10s
@@ -73,7 +73,7 @@ services:
     restart: always
     healthcheck:
       <<: *health_check_default
-      test: ["CMD", "curl", "-f", "http://localhost"]
+      test: ["CMD", "wp", "theme", "is-installed", "oceanwp"]
 
 networks:
   inception_network:

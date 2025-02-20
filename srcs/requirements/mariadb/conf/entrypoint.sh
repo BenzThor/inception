@@ -44,5 +44,7 @@ if [ ! -d "/var/lib/mysql/mysql" ]; then
     fi
 fi
 
+echo "mariadb started"
+
 # Start MariaDB in the foreground to keep the container running
 exec /usr/bin/mysqld --user=mysql --console
