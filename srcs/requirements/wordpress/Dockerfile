@@ -7,6 +7,7 @@ RUN apk add --no-cache --update php${PHP_VERSION} curl php${PHP_VERSION}-mysqli 
 	# Download the latest WordPress tarball
     curl -O https://wordpress.org/latest.tar.gz && \
 	curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+	
     # Extract the WordPress tarball
     tar -xvzf latest.tar.gz && \
     # Copy the extracted WordPress files to the web root directory
@@ -14,6 +15,8 @@ RUN apk add --no-cache --update php${PHP_VERSION} curl php${PHP_VERSION}-mysqli 
     cp -R wordpress/* /var/www/html/ && \
     # Clean up: remove the extracted WordPress folder and the tarball
     rm -rf wordpress latest.tar.gz && \
+	# change ownership of /var/www
+	chown -R www-data:www-data /var/www/ && \
 	# Make the WP-CLI PHAR file executable
     chmod +x wp-cli.phar && \
     # Move the WP-CLI PHAR file to a directory in the system PATH to allow global access (as wp)
