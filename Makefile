@@ -38,7 +38,7 @@ build: create_dirs
 		/bin/echo -e "ALPINE_VERSION=$(ALPINE_VERSION)\nPHP_VERSION=$(PHP_VERSION)" >> ./srcs/.env; \
 	fi
 	docker compose -f ./srcs/docker-compose.yml config
-	$(DOCKER_COMPOSE) build --progress=plain
+	$(DOCKER_COMPOSE) build
 
 up: create_dirs
 	${DOCKER_COMPOSE} up -d
