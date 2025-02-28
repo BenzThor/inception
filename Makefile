@@ -67,9 +67,9 @@ clean: down
 fclean: clean
 	if [ -d "./.data" ]; then \
 		sudo chown -R ${USER}:${USER} ./.data; \
+		rm -r $(VOLUMES_DIR); \
 	fi
 	docker system prune -f
-	rm -r $(VOLUMES_DIR)
 	@sed -i '/ALPINE_VERSION/d; /PHP_VERSION/d' $(ENV_DIR)
 
 re: fclean all
