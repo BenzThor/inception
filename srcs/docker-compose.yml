@@ -55,8 +55,8 @@ services:
     environment:
       DB_HOST_WP: ${DB_HOST_WP}
       DB_NAME_WP: ${DB_NAME_WP}
-      DB_USER_WP: ${DB_USER_WP}
-      DB_PASSWORD_WP: ${DB_PASSWORD_WP}
+      DB_USER_WP: ${MYSQL_USER}
+      DB_PASSWORD_WP: ${MYSQL_PW}
       URL_WP: ${URL_WP}
       TITLE_WP: ${TITLE_WP}
       ADMIN_USER_WP: ${ADMIN_USER_WP}
