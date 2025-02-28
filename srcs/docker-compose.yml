@@ -62,6 +62,9 @@ services:
       ADMIN_USER_WP: ${ADMIN_USER_WP}
       ADMIN_PASSWORD_WP: ${ADMIN_PASSWORD_WP}
       ADMIN_EMAIL_WP: ${ADMIN_EMAIL_WP}
+      USER_WP: ${USER_WP}
+      USER_PW_WP: ${USER_PW_WP}
+      USER_EMAIL_WP: ${USER_EMAIL_WP}
     networks:
       - inception_network
     depends_on:

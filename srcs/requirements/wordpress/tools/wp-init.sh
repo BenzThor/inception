@@ -9,11 +9,6 @@ wait_for_maria_db() {
 	echo "MariaDB is healthy! Proceeding with WordPress initialization."
 }
 
-# this is a comment
-echo \n
-ls /usr/local/bin/
-echo \n
-
 if [ ! -f /var/www/html/wp-config.php ]; then
 	# wp core download --path=/var/www/html
 	wait_for_maria_db
@@ -22,8 +17,9 @@ if [ ! -f /var/www/html/wp-config.php ]; then
 	wp theme install oceanwp --activate
 	wp option update home 'https://127.0.0.1'
 	wp option update siteurl 'https://127.0.0.1'
+	wp user create $USER_WP $USER_EMAIL_WP --role=author --user_pass=$USER_PW_WP
 fi
 
-# wp plugin update --all
+wp plugin update --all
 
 exec php-fpm --nodaemonize
