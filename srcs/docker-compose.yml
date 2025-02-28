@@ -53,10 +53,6 @@ services:
     volumes:
       - wp_volume:/var/www/html
     environment:
-      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
-      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
-      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
-      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
       DB_HOST_WP: ${DB_HOST_WP}
       DB_NAME_WP: ${DB_NAME_WP}
       DB_USER_WP: ${DB_USER_WP}
