@@ -1,5 +1,5 @@
 DOCKER_COMPOSE = docker compose -f ./srcs/docker-compose.yml
-VOLUMES_DIR = ./.data
+VOLUMES_DIR = ~/data
 WORDPRESS_DIR = ${VOLUMES_DIR}/wp
 MARIADB_DIR = ${VOLUMES_DIR}/mariadb
 ENV_DIR = ./srcs/.env

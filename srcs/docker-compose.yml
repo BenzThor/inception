@@ -85,11 +85,11 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ../.data/mariadb
+      device: ~/data/mariadb
       o: bind
   wp_volume:
     driver: local
     driver_opts:
       type: none
-      device: ../.data/wp
+      device: ~/data/wp
       o: bind
