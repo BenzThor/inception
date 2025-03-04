@@ -5,6 +5,7 @@ services:
       args:
         ALPINE_VERSION: ${ALPINE_VERSION:-}
     image: nginx:tbenz # Name and tag for the built image
+    container_name: nginx
     volumes:
       - wp_volume:/var/www/html
     ports:
@@ -17,7 +18,7 @@ services:
       - wordpress
     restart: always
     healthcheck: &health_check_default
-      test: ["CMD", "curl", "-f", "https://127.0.0.1/"]
+      test: ["CMD", "curl", "-fk", "https://tbenz.42.fr/"]
       interval: 30s
       retries: 3
       start_period: 10s
@@ -28,6 +29,7 @@ services:
       args:
         ALPINE_VERSION: ${ALPINE_VERSION:-}
     image: mariadb:tbenz
+    container_name: mariadb
     volumes:
       - mariadb_volume:/var/lib/mysql
     environment:
@@ -50,6 +52,7 @@ services:
         ALPINE_VERSION: ${ALPINE_VERSION:-}
         PHP_VERSION: ${PHP_VERSION}
     image: wordpress:tbenz
+    container_name: wordpress
     volumes:
       - wp_volume:/var/www/html
     environment:
@@ -72,10 +75,11 @@ services:
     restart: always
     healthcheck:
       <<: *health_check_default
-      test: ["CMD", "wp", "theme", "is-installed", "oceanwp"]
+      test: ["CMD", "wp", "theme", "is-installed", "neve"]
 
 networks:
   inception_network:
+    name: inception_network
     # driver: bridge
     # name: inception_net
     # internal: true

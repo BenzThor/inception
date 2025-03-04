@@ -23,7 +23,6 @@ RUN apk add --no-cache --update php${PHP_VERSION} curl php${PHP_VERSION}-mysqli 
     chmod +x wp-cli.phar && \
     # Move the WP-CLI PHAR file to a directory in the system PATH to allow global access (as wp)
     mv wp-cli.phar /usr/local/bin/wp && \
-	ls /usr/local/bin/wp && \
 	#create a symbolic link to be able to execute php-fpmMajorMiniroVersion
 	ln -s /usr/sbin/php-fpm${PHP_VERSION} /usr/bin/php-fpm
 

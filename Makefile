@@ -1,5 +1,5 @@
 DOCKER_COMPOSE = docker compose -f ./srcs/docker-compose.yml
-VOLUMES_DIR = ~/data
+VOLUMES_DIR = ${HOME}/data
 WORDPRESS_DIR = ${VOLUMES_DIR}/wp
 MARIADB_DIR = ${VOLUMES_DIR}/mariadb
 ENV_DIR = ./srcs/.env
@@ -65,9 +65,9 @@ clean: down
 	${DOCKER_COMPOSE} down -v --rmi all --remove-orphans
 
 fclean: clean
-	if [ -d "./.data" ]; then \
-		sudo chown -R ${USER}:${USER} ./.data; \
-		rm -r $(VOLUMES_DIR); \
+	if [ -d "${VOLUMES_DIR}" ]; then \
+		sudo chown -R ${USER}:${USER} "${VOLUMES_DIR}"; \
+		rm -r "$(VOLUMES_DIR)"; \
 	fi
 	docker system prune -f
 	@sed -i '/ALPINE_VERSION/d; /PHP_VERSION/d' $(ENV_DIR)
