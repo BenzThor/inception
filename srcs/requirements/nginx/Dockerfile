@@ -5,7 +5,7 @@ FROM alpine:${ALPINE_VERSION}
 COPY ./conf/generate-cert.sh /usr/local/bin/
 
 # Install Nginx and OpenSSL
-RUN	apk add --no-cache --update openssl nginx ca-certificates && \
+RUN	apk add --no-cache --update openssl nginx ca-certificates curl && \
 # Create 'www-data' group if it doesn't exist
 getent group www-data || addgroup -S www-data && \
 # Create a new user 'www-data' and add it to the 'www-data' group, without a home directory

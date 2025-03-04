@@ -18,7 +18,7 @@ services:
       - wordpress
     restart: always
     healthcheck: &health_check_default
-      test: ["CMD", "curl", "-fk", "https://tbenz.42.fr/"]
+      test: ["CMD", "curl", "-f", "https://tbenz.42.fr/"]
       interval: 30s
       retries: 3
       start_period: 10s
